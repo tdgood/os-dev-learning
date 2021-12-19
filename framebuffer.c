@@ -42,12 +42,12 @@ void fb_move_cursor(unsigned short pos) {
  * Writes the contents of the buffer buf of length len to the screen
  *
  * @param buf The data to write to the screen
- * @param length The length of the buffer (or how much to write to the screen)
+ * @param len The length of the buffer (or how much to write to the screen)
  */
-int fb_write(char *buf, unsigned int length) {
+int fb_write(char *buf, unsigned int len) {
     unsigned int cursor_pos = 0;
 
-    for (unsigned int buf_pos = 0; buf_pos < length; buf_pos++) {
+    for (unsigned int buf_pos = 0; buf_pos < len; buf_pos++) {
         switch (buf[buf_pos]) {
             case '\n':
                 cursor_pos = (cursor_pos + FB_WIDTH) - (cursor_pos % FB_WIDTH);
@@ -73,5 +73,5 @@ int fb_write(char *buf, unsigned int length) {
         }
     }
 
-    return length;
+    return len;
 }
