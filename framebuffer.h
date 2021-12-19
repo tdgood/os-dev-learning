@@ -3,6 +3,10 @@
 
 #include "io.h"
 
+// Framebuffer sizes
+#define FB_WIDTH 80
+#define FB_HEIGHT 25
+
 // Colors for framebuffer writing
 #define FB_COLOR_BLACK 0
 #define FB_COLOR_BLUE 1

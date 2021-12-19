@@ -34,7 +34,7 @@ void fb_move_cursor(unsigned short pos) {
     outb(FB_COMMAND_PORT, FB_HIGH_BYTE_COMMAND);
     outb(FB_DATA_PORT, (pos >> 8) & 0x00FF);
     outb(FB_COMMAND_PORT, FB_LOW_BYTE_COMMAND);
-    outb(FB_DATA_PORT, pos & 0x00FF );
+    outb(FB_DATA_PORT, pos & 0x00FF);
 }
 
 /*
@@ -45,9 +45,32 @@ void fb_move_cursor(unsigned short pos) {
  * @param length The length of the buffer (or how much to write to the screen)
  */
 int fb_write(char *buf, unsigned int length) {
-    for (unsigned int i = 0, fb = 0; i < length; i++, fb += 2) {
-        fb_move_cursor(i);
-        fb_write_cell(fb, buf[i], FB_COLOR_LIGHT_GREY, FB_COLOR_BLACK);
+    unsigned int cursor_pos = 0;
+
+    for (unsigned int buf_pos = 0; buf_pos < length; buf_pos++) {
+        switch (buf[buf_pos]) {
+            case '\n':
+                cursor_pos = (cursor_pos + FB_WIDTH) - (cursor_pos % FB_WIDTH);
+                break;
+
+            default:
+                fb_write_cell(2 * cursor_pos, buf[buf_pos], FB_COLOR_LIGHT_GREY, FB_COLOR_BLACK);
+                fb_move_cursor(++cursor_pos);
+                break;
+        }
+        
+        // Scroll the screen up if necessary
+        if (cursor_pos == (FB_WIDTH * FB_HEIGHT)) {
+            for (unsigned int i = 0; i < 2 * FB_WIDTH * (FB_HEIGHT - 1); i += 2) {
+                fb_write_cell(i, fb[i + (2 * FB_WIDTH)], FB_COLOR_LIGHT_GREY, FB_COLOR_BLACK);
+            }
+
+            for (unsigned int i = 2 * FB_WIDTH * (FB_HEIGHT - 1); i < 2 * FB_WIDTH * FB_HEIGHT; i += 2) {
+                fb_write_cell(i, 0, FB_COLOR_LIGHT_GREY, FB_COLOR_BLACK);
+            }
+
+            cursor_pos = FB_WIDTH * (FB_HEIGHT - 1);
+        }
     }
 
     return length;
