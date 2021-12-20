@@ -1,12 +1,11 @@
 #include "framebuffer.h"
 #include "serial.h"
-
-int sum_of_three(int arg1, int arg2, int arg3) {
-    return arg1 + arg2 + arg3;
-}
+#include "segmentation.h"
 
 int kmain() {
-    serial_write("This is a test.\n", 16); 
+    fb_write("Hello world!\n", 13);
+    serial_write("Hello world!\n", 13);
+    segmentation_fill_and_load_gdt();
 
     return 0;
 }

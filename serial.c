@@ -101,7 +101,7 @@ int serial_is_transmit_fifo_empty(unsigned short com) {
  * @param len The length of the buffer (or how much to write)
  * @return The parameter len
  */
-int serial_write(char *buf, unsigned int len) {
+unsigned int serial_write(char *buf, unsigned int len) {
     serial_configure_baud_rate(SERIAL_COM1_BASE, SERIAL_BAUD_RATE_DIVISOR);
     serial_configure_line(SERIAL_COM1_BASE);
     serial_configure_buffers(SERIAL_COM1_BASE);

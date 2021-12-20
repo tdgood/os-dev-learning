@@ -35,6 +35,6 @@ void serial_configure_line(unsigned short com);
 void serial_configure_buffers(unsigned short com);
 void serial_configure_modem(unsigned short com);
 int serial_is_transmit_fifo_empty(unsigned short com);
-int serial_write(char *buf, unsigned int len);
+unsigned int serial_write(char *buf, unsigned int len);
 
 #endif
